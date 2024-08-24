@@ -1,1 +1,1 @@
-# simplismart-coding-test
+# coding-test
