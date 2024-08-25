@@ -77,10 +77,11 @@ const DynamicForm = ({ disabled, inputs, onSubmit }: Props) => {
                     )}
                 </div>
             ))}
-            <div className="w-full">
+            <div className="w-full flex justify-end">
                 <button
+                    disabled={disabled || !isFormValid}
                     type="submit"
-                    className={`text-white focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center`}
+                    className={`text-white ${!isFormValid ? 'bg-gray-700' : 'bg-blue-700 hover:bg-blue-800'} focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center`}
                 >
                     {disabled && (
                         <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
