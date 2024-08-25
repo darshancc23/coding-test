@@ -2,9 +2,9 @@ import React from 'react';
 
 interface Props {
     label: string,
-    value: any,
-    defaultValue: any,
-    onChange: (name: string, value: string) => void
+    value: string | number | null,
+    defaultValue: string | number | null,
+    onChange: (name: string, value: string | number | null) => void
 }
 
 const Textfield: React.FC<Props> = ({ label, defaultValue, value, onChange }) => {

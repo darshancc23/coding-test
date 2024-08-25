@@ -2,17 +2,24 @@ import React from 'react';
 
 interface Props {
     label: string,
-    value: any,
-    defaultValue: any,
-    onChange: (name: string, value: number) => void
+    value: number | string | null,
+    defaultValue: number | string | null,
+    onChange: (name: string, value: string | number | null) => void
 }
 
 const NumberInput: React.FC<Props> = ({ label, defaultValue, value, onChange }) => {
 
     const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        onChange(label, parseFloat(e.target.value));
-      };
-    
+        const inputValue = e.target.value;
+
+        if (inputValue === '') {
+            onChange(label, null);
+        } else {
+            const parsedValue = parseFloat(inputValue);
+            onChange(label, isNaN(parsedValue) ? null : parsedValue);
+        }
+    };
+
     return (
         <input
             id={label}
