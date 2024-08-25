@@ -2,14 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import DynamicForm from '@/composites/DynamicForm';
-import Output from '@/components/Output';
+import Output from '@/composites/Output';
+import Loader from '@/components/Loader';
 import { fetchModelSpaceById, predictModelSpaceById } from '@/api/modelSpaces';
 import { ModelSpaceDetails } from '@/types/modelSpaces.dto';
 
 const ModelSpaceDetailPage = () => {
     const { id } = useParams();
+    const router = useRouter();
+
     const [modelSpace, setModelSpace] = useState<ModelSpaceDetails | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -34,7 +37,7 @@ const ModelSpaceDetailPage = () => {
         }
     }, [id]);
 
-    const handleSubmit = async (formData: { [key: string]: any }) => {
+    const handleSubmit = async (formData: { [key: string]: string | number | null }) => {
         setLoadingForm(true);
         setErrorForm(null);
 
@@ -48,12 +51,31 @@ const ModelSpaceDetailPage = () => {
         }
     };
 
+    const handleGoHome = () => {
+        router.push('/');
+    };
+
     if (loading) {
-        return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+        return <Loader />;
     }
 
     if (error) {
-        return <div className="flex items-center justify-center min-h-screen text-red-500">{error}</div>;
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen p-6 text-red-500">
+                <p>
+                    There was an issue fetching this model's details
+                </p>
+                <p className="mb-6">
+                    If the issue persists, try again in a while
+                </p>
+                <button
+                    onClick={handleGoHome}
+                    className="bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-600"
+                >
+                    Go Back Home
+                </button>
+            </div>
+        );
     }
 
     if (!modelSpace) {
@@ -63,14 +85,19 @@ const ModelSpaceDetailPage = () => {
     return (
         <div className="flex flex-col min-h-screen bg-gray-50 p-6">
             <div className="container mx-auto">
-                <div className="mb-8">
-                    <img src={modelSpace.avatar} alt={modelSpace.name} className="w-full h-64 object-cover rounded-lg" />
-                    <h1 className="text-4xl font-bold mt-4">{modelSpace.name}</h1>
-                    <p className="text-gray-700 mt-2">{modelSpace.description}</p>
+                <div className="flex items-start space-x-4 mb-8">
+                    <img
+                        src={modelSpace.avatar}
+                        alt={modelSpace.name}
+                        className="w-24 h-24 object-cover"
+                    />
+                    <div>
+                        <h1 className="text-3xl font-bold">{modelSpace.name}</h1>
+                        <p className="text-gray-700 mt-2">{modelSpace.description}</p>
+                    </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="bg-white p-6 rounded-lg shadow">
-                        <h2 className="text-2xl font-semibold mb-4">Input Section</h2>
                         <DynamicForm
                             disabled={loadingForm}
                             inputs={modelSpace.inputs}
@@ -78,8 +105,8 @@ const ModelSpaceDetailPage = () => {
                         />
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow">
-                        <h2 className="text-2xl font-semibold mb-4">Output Section</h2>
-                        <Output outputData={result}/>
+                        <h2 className="text-1xl font-semibold mb-4">OUTPUT</h2>
+                        <Output outputData={result} isLoading={loadingForm} error={errorForm} />
                     </div>
                 </div>
             </div>
