@@ -76,7 +76,7 @@ const HomePage = () => {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {filteredModelSpaces.map((space) => (
-                        <Card modelSpace={space}/>
+                        <Card key={space.id} modelSpace={space}/>
                     ))}
                 </div>
             </div>

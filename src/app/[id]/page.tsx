@@ -63,7 +63,7 @@ const ModelSpaceDetailPage = () => {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen p-6 text-red-500">
                 <p>
-                    There was an issue fetching this model's details
+                    There was an issue fetching this model details
                 </p>
                 <p className="mb-6">
                     If the issue persists, try again in a while
